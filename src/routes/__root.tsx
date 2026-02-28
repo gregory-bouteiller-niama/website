@@ -1,55 +1,28 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
-import appCss from '../styles.css?url'
+import appCss from "../styles.css?url";
 
+// ROUTE -----------------------------------------------------------------------------------------------------------------------------------
 export const Route = createRootRoute({
   head: () => ({
-    meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'TanStack Start Starter',
-      },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+    meta: [{ charSet: "utf-8" }, { name: "viewport", content: "width=device-width, initial-scale=1" }, { title: "níama" }],
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
-
   shellComponent: RootDocument,
-})
+});
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+// DOCUMENT --------------------------------------------------------------------------------------------------------------------------------
+function RootDocument({ children }: RootDocumentProps) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <HeadContent />
       </head>
       <body>
         {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
         <Scripts />
       </body>
     </html>
-  )
+  );
 }
+type RootDocumentProps = React.PropsWithChildren;

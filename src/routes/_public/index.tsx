@@ -28,9 +28,9 @@ function IndexPage() {
 // CONTENT ---------------------------------------------------------------------------------------------------------------------------------
 function IndexPageContent({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: string }) {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-12 px-4 sm:px-8">
-      <div className="-mt-40 flex animate-float flex-col items-center gap-2">
-        <Image alt="Logo" className="w-32" height={100} src="/logo.svg" width={100} />
+    <main className="flex flex-1 flex-col items-center justify-center gap-12 px-4 py-8 sm:px-8">
+      <div className="flex animate-float flex-col items-center gap-2">
+        <Image alt="Logo" className="w-32" height={100} sizes="128px" src="/logo.png" width={100} />
         <span className="font-logo text-[40px]">níama</span>
       </div>
       <div className="flex w-full max-w-3xl flex-col items-center gap-8">

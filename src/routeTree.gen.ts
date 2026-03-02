@@ -9,60 +9,267 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as EspaceRouteImport } from './routes/espace'
+import { Route as CallbackRouteImport } from './routes/callback'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as EspaceAuthenticatedRouteImport } from './routes/espace/authenticated'
+import { Route as PublicAProposRouteImport } from './routes/_public/a-propos'
+import { Route as PublicDisciplinesIndexRouteImport } from './routes/_public/disciplines/index'
+import { Route as PublicDisciplinesYogArtRouteImport } from './routes/_public/disciplines/yog-art'
+import { Route as PublicDisciplinesAnimusRouteImport } from './routes/_public/disciplines/animus'
+import { Route as PublicDisciplinesAnimaRouteImport } from './routes/_public/disciplines/anima'
 
-const IndexRoute = IndexRouteImport.update({
+const EspaceRoute = EspaceRouteImport.update({
+  id: '/espace',
+  path: '/espace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallbackRoute = CallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
+} as any)
+const EspaceAuthenticatedRoute = EspaceAuthenticatedRouteImport.update({
+  id: '/authenticated',
+  path: '/authenticated',
+  getParentRoute: () => EspaceRoute,
+} as any)
+const PublicAProposRoute = PublicAProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicDisciplinesIndexRoute = PublicDisciplinesIndexRouteImport.update({
+  id: '/disciplines/',
+  path: '/disciplines/',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicDisciplinesYogArtRoute = PublicDisciplinesYogArtRouteImport.update({
+  id: '/disciplines/yog-art',
+  path: '/disciplines/yog-art',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicDisciplinesAnimusRoute = PublicDisciplinesAnimusRouteImport.update({
+  id: '/disciplines/animus',
+  path: '/disciplines/animus',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicDisciplinesAnimaRoute = PublicDisciplinesAnimaRouteImport.update({
+  id: '/disciplines/anima',
+  path: '/disciplines/anima',
+  getParentRoute: () => PublicRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof PublicIndexRoute
+  '/callback': typeof CallbackRoute
+  '/espace': typeof EspaceRouteWithChildren
+  '/a-propos': typeof PublicAProposRoute
+  '/espace/authenticated': typeof EspaceAuthenticatedRoute
+  '/disciplines/anima': typeof PublicDisciplinesAnimaRoute
+  '/disciplines/animus': typeof PublicDisciplinesAnimusRoute
+  '/disciplines/yog-art': typeof PublicDisciplinesYogArtRoute
+  '/disciplines/': typeof PublicDisciplinesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
+  '/espace': typeof EspaceRouteWithChildren
+  '/a-propos': typeof PublicAProposRoute
+  '/espace/authenticated': typeof EspaceAuthenticatedRoute
+  '/': typeof PublicIndexRoute
+  '/disciplines/anima': typeof PublicDisciplinesAnimaRoute
+  '/disciplines/animus': typeof PublicDisciplinesAnimusRoute
+  '/disciplines/yog-art': typeof PublicDisciplinesYogArtRoute
+  '/disciplines': typeof PublicDisciplinesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/callback': typeof CallbackRoute
+  '/espace': typeof EspaceRouteWithChildren
+  '/_public/a-propos': typeof PublicAProposRoute
+  '/espace/authenticated': typeof EspaceAuthenticatedRoute
+  '/_public/': typeof PublicIndexRoute
+  '/_public/disciplines/anima': typeof PublicDisciplinesAnimaRoute
+  '/_public/disciplines/animus': typeof PublicDisciplinesAnimusRoute
+  '/_public/disciplines/yog-art': typeof PublicDisciplinesYogArtRoute
+  '/_public/disciplines/': typeof PublicDisciplinesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/callback'
+    | '/espace'
+    | '/a-propos'
+    | '/espace/authenticated'
+    | '/disciplines/anima'
+    | '/disciplines/animus'
+    | '/disciplines/yog-art'
+    | '/disciplines/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/callback'
+    | '/espace'
+    | '/a-propos'
+    | '/espace/authenticated'
+    | '/'
+    | '/disciplines/anima'
+    | '/disciplines/animus'
+    | '/disciplines/yog-art'
+    | '/disciplines'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/callback'
+    | '/espace'
+    | '/_public/a-propos'
+    | '/espace/authenticated'
+    | '/_public/'
+    | '/_public/disciplines/anima'
+    | '/_public/disciplines/animus'
+    | '/_public/disciplines/yog-art'
+    | '/_public/disciplines/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PublicRoute: typeof PublicRouteWithChildren
+  CallbackRoute: typeof CallbackRoute
+  EspaceRoute: typeof EspaceRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/espace': {
+      id: '/espace'
+      path: '/espace'
+      fullPath: '/espace'
+      preLoaderRoute: typeof EspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/espace/authenticated': {
+      id: '/espace/authenticated'
+      path: '/authenticated'
+      fullPath: '/espace/authenticated'
+      preLoaderRoute: typeof EspaceAuthenticatedRouteImport
+      parentRoute: typeof EspaceRoute
+    }
+    '/_public/a-propos': {
+      id: '/_public/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof PublicAProposRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/disciplines/': {
+      id: '/_public/disciplines/'
+      path: '/disciplines'
+      fullPath: '/disciplines/'
+      preLoaderRoute: typeof PublicDisciplinesIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/disciplines/yog-art': {
+      id: '/_public/disciplines/yog-art'
+      path: '/disciplines/yog-art'
+      fullPath: '/disciplines/yog-art'
+      preLoaderRoute: typeof PublicDisciplinesYogArtRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/disciplines/animus': {
+      id: '/_public/disciplines/animus'
+      path: '/disciplines/animus'
+      fullPath: '/disciplines/animus'
+      preLoaderRoute: typeof PublicDisciplinesAnimusRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/disciplines/anima': {
+      id: '/_public/disciplines/anima'
+      path: '/disciplines/anima'
+      fullPath: '/disciplines/anima'
+      preLoaderRoute: typeof PublicDisciplinesAnimaRouteImport
+      parentRoute: typeof PublicRoute
     }
   }
 }
 
+interface PublicRouteChildren {
+  PublicAProposRoute: typeof PublicAProposRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+  PublicDisciplinesAnimaRoute: typeof PublicDisciplinesAnimaRoute
+  PublicDisciplinesAnimusRoute: typeof PublicDisciplinesAnimusRoute
+  PublicDisciplinesYogArtRoute: typeof PublicDisciplinesYogArtRoute
+  PublicDisciplinesIndexRoute: typeof PublicDisciplinesIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicAProposRoute: PublicAProposRoute,
+  PublicIndexRoute: PublicIndexRoute,
+  PublicDisciplinesAnimaRoute: PublicDisciplinesAnimaRoute,
+  PublicDisciplinesAnimusRoute: PublicDisciplinesAnimusRoute,
+  PublicDisciplinesYogArtRoute: PublicDisciplinesYogArtRoute,
+  PublicDisciplinesIndexRoute: PublicDisciplinesIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
+interface EspaceRouteChildren {
+  EspaceAuthenticatedRoute: typeof EspaceAuthenticatedRoute
+}
+
+const EspaceRouteChildren: EspaceRouteChildren = {
+  EspaceAuthenticatedRoute: EspaceAuthenticatedRoute,
+}
+
+const EspaceRouteWithChildren =
+  EspaceRoute._addFileChildren(EspaceRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  PublicRoute: PublicRouteWithChildren,
+  CallbackRoute: CallbackRoute,
+  EspaceRoute: EspaceRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

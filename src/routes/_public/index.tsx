@@ -36,7 +36,7 @@ function IndexPageContent({ signInUrl, signUpUrl }: { signInUrl: string; signUpU
       <div className="flex w-full max-w-3xl flex-col items-center gap-8">
         <h1 className="text-center font-heading text-7xl sm:text-8xl">L'équilibre invisible rendu tangible</h1>
         <p className="text-center text-lg text-muted-foreground sm:text-xl">
-          Une constellation d'accompagnants rassemblés dans une philosophie commune : vous guider sur le chemin de votre alignement
+          Une constellation d'accompagnants rassemblés autour d'une philosophie commune : vous guider sur le chemin de votre alignement
           intérieur.
         </p>
       </div>

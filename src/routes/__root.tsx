@@ -18,11 +18,11 @@ export const Route = createRootRouteWithContext<RootContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Convex + TanStack Start + WorkOS AuthKit" },
+      { title: "níama | l'équilibre invisible devenu tangible" },
     ],
     links: [
       { rel: "stylesheet", href: appCssUrl },
-      { rel: "icon", href: "/convex.svg" },
+      { rel: "icon", href: "/logo.svg" },
     ],
   }),
   // beforeLoad: async (ctx) => {

@@ -2,29 +2,8 @@ import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, type Transition } from "motion/react";
-import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/animate-ui/components/buttons/button";
-
-type PropType = {
-  slides: number[];
-  options?: EmblaOptionsType;
-};
-
-type EmblaControls = {
-  selectedIndex: number;
-  scrollSnaps: number[];
-  prevDisabled: boolean;
-  nextDisabled: boolean;
-  onDotClick: (index: number) => void;
-  onPrev: () => void;
-  onNext: () => void;
-};
-
-type DotButtonProps = {
-  selected?: boolean;
-  label: string;
-  onClick: () => void;
-};
 
 const transition: Transition = {
   type: "spring",
@@ -34,15 +13,15 @@ const transition: Transition = {
 };
 
 const useEmblaControls = (emblaApi: EmblaCarouselType | undefined): EmblaControls => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
-  const [prevDisabled, setPrevDisabled] = React.useState(true);
-  const [nextDisabled, setNextDisabled] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [prevDisabled, setPrevDisabled] = useState(true);
+  const [nextDisabled, setNextDisabled] = useState(true);
 
-  const onDotClick = React.useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+  const onDotClick = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
 
-  const onPrev = React.useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const onNext = React.useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const onPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const onNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const updateSelectionState = (api: EmblaCarouselType) => {
     setSelectedIndex(api.selectedScrollSnap());
@@ -50,16 +29,16 @@ const useEmblaControls = (emblaApi: EmblaCarouselType | undefined): EmblaControl
     setNextDisabled(!api.canScrollNext());
   };
 
-  const onInit = React.useCallback((api: EmblaCarouselType) => {
+  const onInit = useCallback((api: EmblaCarouselType) => {
     setScrollSnaps(api.scrollSnapList());
     updateSelectionState(api);
   }, []);
 
-  const onSelect = React.useCallback((api: EmblaCarouselType) => {
+  const onSelect = useCallback((api: EmblaCarouselType) => {
     updateSelectionState(api);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!emblaApi) return;
 
     onInit(emblaApi);
@@ -81,7 +60,8 @@ const useEmblaControls = (emblaApi: EmblaCarouselType | undefined): EmblaControl
   };
 };
 
-function MotionCarousel(props: PropType) {
+// MAIN ------------------------------------------------------------------------------------------------------------------------------------
+export function MotionCarousel(props: MotionCarouselProps) {
   const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const { selectedIndex, scrollSnaps, prevDisabled, nextDisabled, onDotClick, onPrev, onNext } = useEmblaControls(emblaApi);
@@ -94,10 +74,7 @@ function MotionCarousel(props: PropType) {
             const isActive = index === selectedIndex;
 
             return (
-              <motion.div
-                className="mr-[var(--slide-spacing)] flex h-[var(--slide-height)] min-w-0 flex-none basis-[var(--slide-size)]"
-                key={index}
-              >
+              <motion.div className="mr-(--slide-spacing) flex h-(--slide-height) min-w-0 flex-none basis-(--slide-size)" key={index}>
                 <motion.div
                   animate={{
                     scale: isActive ? 1 : 0.9,
@@ -132,7 +109,12 @@ function MotionCarousel(props: PropType) {
     </div>
   );
 }
+type MotionCarouselProps = {
+  slides: number[];
+  options?: EmblaOptionsType;
+};
 
+// DOT BUTTON ------------------------------------------------------------------------------------------------------------------------------
 function DotButton({ selected = false, label, onClick }: DotButtonProps) {
   return (
     <motion.button
@@ -163,5 +145,15 @@ function DotButton({ selected = false, label, onClick }: DotButtonProps) {
     </motion.button>
   );
 }
+type DotButtonProps = { selected?: boolean; label: string; onClick: () => void };
 
-export { MotionCarousel };
+// TYPES -----------------------------------------------------------------------------------------------------------------------------------
+type EmblaControls = {
+  selectedIndex: number;
+  scrollSnaps: number[];
+  prevDisabled: boolean;
+  nextDisabled: boolean;
+  onDotClick: (index: number) => void;
+  onPrev: () => void;
+  onNext: () => void;
+};

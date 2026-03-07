@@ -1,33 +1,24 @@
+import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Badge } from "./badge";
+import { Badge } from "@/components/adapted/badge";
 
-type Testimonial = {
-  disciplines: string[];
-  name: string;
-  quote: string;
-  src: string;
-};
-type Colors = {
-  arrowBackground?: string;
-  arrowForeground?: string;
-  arrowHoverBackground?: string;
-  designation?: string;
-  name?: string;
-  testimony?: string;
-};
-type FontSizes = {
-  designation?: string;
-  name?: string;
-  quote?: string;
-};
-type CircularTestimonialsProps = {
-  autoplay?: boolean;
-  colors?: Colors;
-  fontSizes?: FontSizes;
-  testimonials: Testimonial[];
+// STYLES ----------------------------------------------------------------------------------------------------------------------------------
+const STYLES = {
+  arrowButton: cva(
+    "flex h-[2.7rem] w-[2.7rem] cursor-pointer items-center justify-center rounded-full border-none transition-colors duration-300"
+  ),
+  arrowButtons: cva("flex gap-6 pt-12 md:pt-0"),
+  designation: cva("mb-8"),
+  imageContainer: cva("perspective-[1000px] relative h-96 w-full"),
+  name: cva("mb-1 font-bold"),
+  quote: cva("leading-[1.75]"),
+  testimonialContainer: cva("w-full max-w-4xl p-8"),
+  testimonialContent: cva("flex flex-col justify-between"),
+  testimonialGrid: cva("grid gap-20 md:grid-cols-2"),
+  testimonialImage: cva("absolute h-full w-full rounded-[1.5rem] object-cover shadow-[0_10px_30px_rgba(0,0,0,0.2)]"),
 };
 
 function calculateGap(width: number) {
@@ -40,7 +31,8 @@ function calculateGap(width: number) {
   return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
 }
 
-export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {}, fontSizes = {} }: CircularTestimonialsProps) => {
+// MAIN ------------------------------------------------------------------------------------------------------------------------------------
+export const AttendantsCarousel = ({ testimonials, autoplay = true, colors = {}, fontSizes = {} }: AttendantsCarouselProps) => {
   // Color & font config
   const colorName = colors.name ?? "#000";
   const colorDesignation = colors.designation ?? "#6b7280";
@@ -114,7 +106,6 @@ export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {
     const gap = calculateGap(containerWidth);
     const maxStickUp = gap * 0.8;
     const offset = (index - activeIndex + testimonialsLength) % testimonialsLength;
-    // const zIndex = testimonialsLength - Math.abs(offset);
     const isActive = index === activeIndex;
     const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
     const isRight = (activeIndex + 1) % testimonialsLength === index;
@@ -162,23 +153,25 @@ export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {
   };
 
   return (
-    <div className="testimonial-container">
-      <div className="testimonial-grid">
+    <div className={STYLES.testimonialContainer()}>
+      <div className={STYLES.testimonialGrid()}>
         {/* Images */}
-        <div className="image-container" ref={imageContainerRef}>
+        <div className={STYLES.imageContainer()} ref={imageContainerRef}>
           {testimonials.map((testimonial, index) => (
             <img
               alt={testimonial.name}
-              className="testimonial-image"
+              className={STYLES.testimonialImage()}
               data-index={index}
+              height={500}
               key={testimonial.src}
               src={testimonial.src}
               style={getImageStyle(index)}
+              width={500} // Added to resolve biome/img error
             />
           ))}
         </div>
         {/* Content */}
-        <div className="testimonial-content">
+        <div className={STYLES.testimonialContent()}>
           <AnimatePresence mode="wait">
             <motion.div
               animate="animate"
@@ -188,15 +181,15 @@ export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               variants={quoteVariants}
             >
-              <h3 className="name" style={{ color: colorName, fontSize: fontSizeName }}>
+              <h3 className={STYLES.name()} style={{ color: colorName, fontSize: fontSizeName }}>
                 {activeTestimonial.name}
               </h3>
-              <div className="designation" style={{ color: colorDesignation, fontSize: fontSizeDesignation }}>
+              <div className={STYLES.designation()} style={{ color: colorDesignation, fontSize: fontSizeDesignation }}>
                 {activeTestimonial.disciplines.map((discipline) => (
                   <Badge key={discipline}>{discipline}</Badge>
                 ))}
               </div>
-              <motion.p className="quote" style={{ color: colorTestimony, fontSize: fontSizeQuote }}>
+              <motion.p className={STYLES.quote()} style={{ color: colorTestimony, fontSize: fontSizeQuote }}>
                 {activeTestimonial.quote.split(" ").map((word, i) => (
                   <motion.span
                     animate={{
@@ -209,7 +202,7 @@ export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {
                       opacity: 0,
                       y: 5,
                     }}
-                    key={i}
+                    key={`${activeTestimonial.name}-${word}-${i}`}
                     style={{ display: "inline-block" }}
                     transition={{
                       duration: 0.22,
@@ -223,103 +216,65 @@ export const CircularTestimonials = ({ testimonials, autoplay = true, colors = {
               </motion.p>
             </motion.div>
           </AnimatePresence>
-          <div className="arrow-buttons">
+          <div className={STYLES.arrowButtons()}>
             <button
               aria-label="Previous testimonial"
-              className="arrow-button prev-button"
+              className={STYLES.arrowButton({ className: "prev-button" })}
               onClick={handlePrev}
               onMouseEnter={() => setHoverPrev(true)}
               onMouseLeave={() => setHoverPrev(false)}
               style={{
                 backgroundColor: hoverPrev ? colorArrowHoverBg : colorArrowBg,
               }}
+              type="button"
             >
               <FaArrowLeft color={colorArrowFg} size={28} />
             </button>
             <button
               aria-label="Next testimonial"
-              className="arrow-button next-button"
+              className={STYLES.arrowButton({ className: "next-button" })}
               onClick={handleNext}
               onMouseEnter={() => setHoverNext(true)}
               onMouseLeave={() => setHoverNext(false)}
               style={{
                 backgroundColor: hoverNext ? colorArrowHoverBg : colorArrowBg,
               }}
+              type="button"
             >
               <FaArrowRight color={colorArrowFg} size={28} />
             </button>
           </div>
         </div>
       </div>
-      <style jsx>{`
-        .testimonial-container {
-          width: 100%;
-          max-width: 56rem;
-          padding: 2rem;
-        }
-        .testimonial-grid {
-          display: grid;
-          gap: 5rem;
-        }
-        .image-container {
-          position: relative;
-          width: 100%;
-          height: 24rem;
-          perspective: 1000px;
-        }
-        .testimonial-image {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 1.5rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        .testimonial-content {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-        .name {
-          font-weight: bold;
-          margin-bottom: 0.25rem;
-        }
-        .designation {
-          margin-bottom: 2rem;
-        }
-        .quote {
-          line-height: 1.75;
-        }
-        .arrow-buttons {
-          display: flex;
-          gap: 1.5rem;
-          padding-top: 3rem;
-        }
-        .arrow-button {
-          width: 2.7rem;
-          height: 2.7rem;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          border: none;
-        }
-        .word {
-          display: inline-block;
-        }
-        @media (min-width: 768px) {
-          .testimonial-grid {
-            grid-template-columns: 1fr 1fr;
-          }
-          .arrow-buttons {
-            padding-top: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 };
+export type AttendantsCarouselProps = {
+  autoplay?: boolean;
+  colors?: Colors;
+  fontSizes?: FontSizes;
+  testimonials: Testimonial[];
+};
 
-export default CircularTestimonials;
+// TYPES -----------------------------------------------------------------------------------------------------------------------------------
+type Testimonial = {
+  disciplines: string[];
+  name: string;
+  quote: string;
+  src: string;
+};
+
+type Colors = {
+  arrowBackground?: string;
+  arrowForeground?: string;
+  arrowHoverBackground?: string;
+  designation?: string;
+  name?: string;
+  testimony?: string;
+};
+
+type FontSizes = {
+  designation?: string;
+  name?: string;
+  quote?: string;
+};

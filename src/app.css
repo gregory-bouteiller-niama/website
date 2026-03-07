@@ -9,7 +9,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --anima: oklch(65.207% 0.13067 358.234);
+  --anima: oklch(64.893% 0.13079 358.269);
   --animus: oklch(67.507% 0.08637 199.272);
   --yogart: oklch(65.227% 0.10711 237.321);
 

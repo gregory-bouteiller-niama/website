@@ -33,7 +33,7 @@ const HEADER = {
   }),
   logoImage: cva("w-full"),
   logoText: cva("font-logo text-[40px]"),
-  menu: cva("sticky top-4 z-50 flex min-h-14.5 flex-col justify-center self-center border-y py-2", {
+  menu: cva("sticky top-4 z-50 flex min-h-14.5 w-auto flex-col justify-center self-center border-y py-2", {
     variants: { isScrolled: { true: "border-y-transparent", false: "border-y-muted" } },
   }),
   nav: cva("relative cursor-pointer px-4 py-2 uppercase tracking-widest sm:px-2 sm:py-1 sm:text-sm md:px-4 md:py-2 md:text-base"),

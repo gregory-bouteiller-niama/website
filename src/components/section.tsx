@@ -1,9 +1,19 @@
 import { useNavigate } from "@tanstack/react-router";
+import { cva } from "class-variance-authority";
 import { motion, useInView } from "motion/react";
 import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { Separator } from "./ui/separator";
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export function Section({ children, className, id }: SectionProps) {
+export const SECTION = {
+  base: cva("relative flex w-full flex-col items-center gap-4 pb-8"),
+  description: cva("mb-12 max-w-4xl text-center text-lg text-muted-foreground sm:text-xl"),
+  separator: cva("self-center! h-24"),
+  title: cva("text-center font-heading text-6xl"),
+};
+
+export function Section({ children, className, description, id, title, withSeparator }: SectionProps) {
   const navigate = useNavigate();
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { margin: "-74px 0px -100% 0px" });
@@ -14,39 +24,19 @@ export function Section({ children, className, id }: SectionProps) {
   }, [isInView, id, navigate]);
 
   return (
-    <>
-      {/* <InViewDebugOverlay margin={margin} /> */}
-      <motion.section
-        animate={isInViewAnimate ? { opacity: 1, y: 0 } : {}}
-        className={className}
-        id={id}
-        initial={{ opacity: 0, y: 20 }}
-        ref={ref}
-        transition={{ duration: 0.5 }}
-      >
-        {children}
-      </motion.section>
-    </>
+    <motion.section
+      animate={isInViewAnimate ? { opacity: 1, y: 0 } : {}}
+      className={cn(SECTION.base(), className)}
+      id={id}
+      initial={{ opacity: 0, y: 20 }}
+      ref={ref}
+      transition={{ duration: 0.5 }}
+    >
+      {withSeparator && <Separator className={SECTION.separator()} orientation="vertical" />}
+      {title && <h2 className={SECTION.title()}>{title}</h2>}
+      {description && <p className={SECTION.description()}>{description}</p>}
+      {children}
+    </motion.section>
   );
 }
-export type SectionProps = React.PropsWithChildren<{ className?: string; id?: string }>;
-
-function InViewDebugOverlay({ margin = "-100px 0px -100px 0px" }) {
-  // Parse "top right bottom left" (like CSS margin, but inverted for inset)
-  const [top, right, bottom, left] = margin.split(" ").map((v) => v.trim());
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: top.startsWith("-") ? top.slice(1) : `-${top}`,
-        right: right.startsWith("-") ? right.slice(1) : `-${right}`,
-        bottom: bottom.startsWith("-") ? bottom.slice(1) : `-${bottom}`,
-        left: left.startsWith("-") ? left.slice(1) : `-${left}`,
-        border: "1px dashed red",
-        pointerEvents: "none",
-        zIndex: 9999,
-      }}
-    />
-  );
-}
+export type SectionProps = React.ComponentProps<"section"> & { description?: string; id: string; title?: string; withSeparator?: boolean };

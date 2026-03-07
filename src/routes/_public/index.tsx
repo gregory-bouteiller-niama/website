@@ -1,153 +1,134 @@
-import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Image } from "@unpic/react";
-import { getAuth, getSignInUrl, getSignUpUrl } from "@workos/authkit-tanstack-react-start";
-import { useMutation } from "convex/react";
-import { Button } from "@/components/ui/button";
-import { api } from "@/convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { cva } from "class-variance-authority";
+import { MotionCarousel } from "@/components/animate-ui/components/community/motion-carousel";
+import { Section } from "@/components/section";
+import CircularTestimonials from "@/components/ui/circular-testimonials";
+import { Separator } from "@/components/ui/separator";
 
 // ROUTE -----------------------------------------------------------------------------------------------------------------------------------
 export const Route = createFileRoute("/_public/")({
   component: IndexPage,
-  loader: async () => {
-    const { user } = await getAuth();
-    const signInUrl = await getSignInUrl();
-    const signUpUrl = await getSignUpUrl();
-
-    return { user, signInUrl, signUpUrl };
-  },
 });
+
+// STYLES ----------------------------------------------------------------------------------------------------------------------------------
+const PAGE = {
+  base: cva("container mx-auto flex flex-col items-center px-4 py-8 sm:px-8"),
+};
 
 // PAGE ------------------------------------------------------------------------------------------------------------------------------------
 function IndexPage() {
-  const { signInUrl, signUpUrl } = Route.useLoaderData();
-  return <IndexPageContent signInUrl={signInUrl} signUpUrl={signUpUrl} />;
+  return (
+    <div className={PAGE.base()}>
+      <Hero />
+      <Disciplines />
+      <Attendants />
+      <Contact />
+    </div>
+  );
 }
 
-// CONTENT ---------------------------------------------------------------------------------------------------------------------------------
-function IndexPageContent({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: string }) {
+// HERO ------------------------------------------------------------------------------------------------------------------------------------
+function Hero() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-12 px-4 py-8 sm:px-8">
-      <div className="flex animate-float flex-col items-center gap-2">
-        <Image alt="Logo" className="w-32" height={100} sizes="128px" src="/logo.png" width={100} />
-        <span className="font-logo text-[40px]">níama</span>
-      </div>
-      <div className="flex w-full max-w-3xl flex-col items-center gap-8">
+    <Section className="flex flex-1 flex-col items-center justify-center gap-12" id="top-3">
+      <div className="flex w-full max-w-3xl flex-col items-center gap-8 py-8">
         <h1 className="text-center font-heading text-7xl sm:text-8xl">L'équilibre invisible rendu tangible</h1>
         <p className="text-center text-lg text-muted-foreground sm:text-xl">
           Une constellation d'accompagnants rassemblés autour d'une philosophie commune : vous guider sur le chemin de votre alignement
           intérieur.
         </p>
       </div>
-      <Button className="relative rounded-4xl p-6 uppercase tracking-widest" size="lg" variant="outline">
-        Bientôt disponible
-      </Button>
-      {/* <h1 className="text-center font-bold text-4xl">Convex + TanStack Start + WorkOS</h1>
-      <Authenticated>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Content />
-        </Suspense>
-      </Authenticated>
-      <Unauthenticated>
-        <SignInForm signInUrl={signInUrl} signUpUrl={signUpUrl} />
-      </Unauthenticated> */}
-    </main>
+    </Section>
   );
 }
 
-// SIGNIN ----------------------------------------------------------------------------------------------------------------------------------
-function SignInForm({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: string }) {
+// DISCIPLINES -----------------------------------------------------------------------------------------------------------------------------
+function Disciplines() {
+  const OPTIONS = { loop: true };
+  const SLIDE_COUNT = 6;
+  const SLIDES = Array.from(new Array(SLIDE_COUNT).keys());
+
   return (
-    <div className="mx-auto flex w-96 flex-col gap-8">
-      <p>Log in to see the numbers</p>
-      <a href={signInUrl}>
-        <Button className="rounded-md bg-foreground px-4 py-2 text-background">Sign in</Button>
-      </a>
-      <a href={signUpUrl}>
-        <Button className="rounded-md bg-foreground px-4 py-2 text-background">Sign up</Button>
-      </a>
-    </div>
+    <Section className="relative flex w-full flex-col items-center gap-4" id="les-voies">
+      <Separator className="self-center! h-24" orientation="vertical" />
+      <h2 className="text-center font-heading text-6xl">Choisissez votre voie</h2>
+      <p className="mb-12 max-w-3xl text-center text-lg text-muted-foreground">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor
+        sit amet consectetur adipisicing elit.
+      </p>
+      <MotionCarousel options={OPTIONS} slides={SLIDES} />
+    </Section>
   );
 }
 
-// CONTENT ---------------------------------------------------------------------------------------------------------------------------------
-function Content() {
-  const {
-    data: { viewer, numbers },
-  } = useSuspenseQuery(convexQuery(api.myFunctions.listNumbers, { count: 10 }));
-  const addNumber = useMutation(api.myFunctions.addNumber);
-
+// ATTENDANTS ------------------------------------------------------------------------------------------------------------------------------
+function Attendants() {
+  const testimonials = [
+    {
+      quote:
+        "I was impressed by the food! And I could really tell that they use high-quality ingredients. The staff was friendly and attentive. I'll definitely be back for more!",
+      name: "Tamar Mendelson",
+      designation: "Restaurant Critic",
+      src: "https://images.unsplash.com/photo-1512316609839-ce289d3eba0a?q=80&w=1368&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    {
+      quote:
+        "This place exceeded all expectations! The atmosphere is inviting, and the staff truly goes above and beyond. I'll keep returning for more exceptional dining experience.",
+      name: "Joe Charlescraft",
+      designation: "Frequent Visitor",
+      src: "https://images.unsplash.com/photo-1628749528992-f5702133b686?q=80&w=1368&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D",
+    },
+    {
+      quote:
+        "Shining Yam is a hidden gem! The impeccable service and overall attention to detail created a memorable experience. I highly recommend it!",
+      name: "Martina Edelweist",
+      designation: "Satisfied Customer",
+      src: "https://images.unsplash.com/photo-1524267213992-b76e8577d046?q=80&w=1368&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D",
+    },
+  ];
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-8">
-      <p>Welcome {viewer}!</p>
-      <p>Click the button below and open this page in another window - this data is persisted in the Convex cloud database!</p>
-      <p>
-        <Button
-          className="rounded-md bg-foreground px-4 py-2 text-background text-sm"
-          onClick={() => addNumber({ value: Math.floor(Math.random() * 10) })}
-        >
-          Add a random number
-        </Button>
+    <Section className="relative flex w-full flex-col items-center gap-4" id="les-accompagnants">
+      <Separator className="self-center! h-24" orientation="vertical" />
+      <h2 className="text-center font-heading text-6xl">puis votre accompagnant</h2>
+      <p className="mb-12 max-w-3xl text-center text-lg text-muted-foreground">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor
+        sit amet consectetur adipisicing elit.
       </p>
-      <p>Numbers: {numbers.length === 0 ? "Click the button!" : numbers.join(", ")}</p>
-      <p>
-        Edit{" "}
-        <code className="rounded-md bg-slate-200 px-1 py-0.5 font-bold font-mono text-sm dark:bg-slate-800">convex/myFunctions.ts</code> to
-        change your backend
-      </p>
-      <p>
-        Edit <code className="rounded-md bg-slate-200 px-1 py-0.5 font-bold font-mono text-sm dark:bg-slate-800">src/routes/index.tsx</code>{" "}
-        to change your frontend
-      </p>
-      <p>
-        See{" "}
-        <Link className="underline hover:no-underline" to="/authenticated">
-          /authenticated
-        </Link>{" "}
-        for an example of a page only available to authenticated users.
-      </p>
-      <div className="flex flex-col">
-        <p className="font-bold text-lg">Useful resources:</p>
-        <div className="flex gap-2">
-          <div className="flex w-1/2 flex-col gap-2">
-            <ResourceCard
-              description="Read comprehensive documentation for all Convex features."
-              href="https://docs.convex.dev/home"
-              title="Convex docs"
-            />
-            <ResourceCard
-              description="Learn about best practices, use cases, and more from a growing collection of articles, videos, and walkthroughs."
-              href="https://stack.convex.dev"
-              title="Stack articles"
-            />
-          </div>
-          <div className="flex w-1/2 flex-col gap-2">
-            <ResourceCard
-              description="Browse our collection of templates to get started quickly."
-              href="https://www.convex.dev/templates"
-              title="Templates"
-            />
-            <ResourceCard
-              description="Join our developer community to ask questions, trade tips & tricks, and show off your projects."
-              href="https://www.convex.dev/community"
-              title="Discord"
-            />
-          </div>
+      <div className="relative flex min-h-[300px] flex-wrap items-center justify-center gap-6 rounded-lg p-16">
+        <div className="relative flex items-center justify-center" style={{ maxWidth: "1024px" }}>
+          <CircularTestimonials
+            autoplay={true}
+            colors={{
+              name: "#f7f7ff",
+              designation: "#e1e1e1",
+              testimony: "#f1f1f7",
+              arrowBackground: "#0582CA",
+              arrowForeground: "#141414",
+              arrowHoverBackground: "#f7f7ff",
+            }}
+            fontSizes={{
+              name: "28px",
+              designation: "20px",
+              quote: "20px",
+            }}
+            testimonials={testimonials}
+          />
         </div>
       </div>
-    </div>
+    </Section>
   );
 }
 
-// RESOURCE CARD ---------------------------------------------------------------------------------------------------------------------------
-function ResourceCard({ title, description, href }: { title: string; description: string; href: string }) {
+// CONTACT -------------------------------------------------------------------------------------------------------------------------------
+function Contact() {
   return (
-    <div className="flex h-28 flex-col gap-2 overflow-auto rounded-md bg-slate-200 p-4 dark:bg-slate-800">
-      <a className="text-sm underline hover:no-underline" href={href}>
-        {title}
-      </a>
-      <p className="text-xs">{description}</p>
-    </div>
+    <Section className="relative flex h-[1600px] flex-col gap-4" id="contact">
+      <Separator className="self-center! h-24" orientation="vertical" />
+      <h2 className="text-center font-heading text-6xl">Et arpentez le chemin...</h2>
+      <p className="mb-12 max-w-3xl text-center text-lg text-muted-foreground">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor
+        sit amet consectetur adipisicing elit.
+      </p>
+    </Section>
   );
 }

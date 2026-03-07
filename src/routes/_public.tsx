@@ -1,5 +1,4 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { getSignInUrl, getSignUpUrl } from "@workos/authkit-tanstack-react-start";
 import { cva } from "class-variance-authority";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
 import Header from "./-header";
@@ -7,20 +6,14 @@ import Header from "./-header";
 // ROUTE -----------------------------------------------------------------------------------------------------------------------------------
 export const Route = createFileRoute("/_public")({
   component: PublicLayout,
-  loader: async () => {
-    const signInUrl = await getSignInUrl();
-    const signUpUrl = await getSignUpUrl();
-    return { signInUrl, signUpUrl };
-  },
 });
 
 // PAGE ------------------------------------------------------------------------------------------------------------------------------------
 function PublicLayout() {
-  const { signInUrl, signUpUrl } = Route.useLoaderData();
   return (
     <>
-      <Header signInUrl={signInUrl} signUpUrl={signUpUrl} />
-      <OrbitalBackground />
+      <Header />
+      <Orbital />
       <GravityStarsBackground className="fixed inset-0" />
       <Outlet />
     </>
@@ -38,17 +31,17 @@ const ORBITAL = {
   ),
 };
 
-function OrbitalBackground() {
+function Orbital() {
   return (
     <div className={ORBITAL.base()}>
       <div className={ORBITAL.orbit({ className: "animation-duration-[60s] size-1/3" })}>
-        <div className={ORBITAL.planet({ className: "bg-yogart dark:bg-white dark:shadow-[0_0_10px_2px_var(--yogart)]" })} />
+        <div className={ORBITAL.planet({ className: "bg-yogart shadow-[0_0_10px_2px_var(--yogart)] dark:bg-white" })} />
       </div>
       <div className={ORBITAL.orbit({ className: "animation-duration-[120s] direction-[reverse] size-2/3" })}>
-        <div className={ORBITAL.planet({ className: "bg-anima dark:bg-white dark:shadow-[0_0_10px_2px_var(--anima)]" })} />
+        <div className={ORBITAL.planet({ className: "bg-anima shadow-[0_0_10px_2px_var(--anima)] dark:bg-white" })} />
       </div>
       <div className={ORBITAL.orbit({ className: "animation-duration-[180s] size-11/12" })}>
-        <div className={ORBITAL.planet({ className: "bg-animus dark:bg-white dark:shadow-[0_0_10px_2px_var(--animus)]" })} />
+        <div className={ORBITAL.planet({ className: "bg-animus shadow-[0_0_10px_2px_var(--animus)] dark:bg-white" })} />
       </div>
     </div>
   );

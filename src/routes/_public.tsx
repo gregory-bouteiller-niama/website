@@ -1,7 +1,8 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
 import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
-import Header from "./-header";
+import { PublicFooter } from "./_public/-footer";
+import { PublicHeader } from "./_public/-header";
 
 // ROUTE -----------------------------------------------------------------------------------------------------------------------------------
 export const Route = createFileRoute("/_public")({
@@ -12,10 +13,11 @@ export const Route = createFileRoute("/_public")({
 function PublicLayout() {
   return (
     <>
-      <Header />
+      <PublicHeader />
       <Orbital />
       <GravityStarsBackground className="fixed inset-0" />
       <Outlet />
+      <PublicFooter />
     </>
   );
 }

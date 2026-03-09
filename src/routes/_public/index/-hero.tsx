@@ -5,7 +5,7 @@ import { Section } from "@/components/section";
 const HERO = {
   base: cva("flex flex-1 flex-col items-center justify-center gap-12"),
   content: cva("flex w-full max-w-3xl flex-col items-center gap-8 py-8"),
-  description: cva("text-center text-lg text-muted-foreground sm:text-xl"),
+  description: cva("text-center font-light text-muted-foreground text-xl sm:text-2xl"),
   title: cva("text-center font-heading text-7xl sm:text-8xl"),
 };
 

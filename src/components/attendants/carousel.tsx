@@ -1,86 +1,69 @@
+import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
-import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Badge } from "@/components/adapted/badge";
+import { Badge } from "../adapted/badge";
+import { Button } from "../adapted/button";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../adapted/card";
+import { SpotlightCard } from "../adapted/spotlight-card";
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const STYLES = {
-  arrowButton: cva(
-    "flex h-[2.7rem] w-[2.7rem] cursor-pointer items-center justify-center rounded-full border-none transition-colors duration-300"
-  ),
-  arrowButtons: cva("flex gap-6 pt-12 md:pt-0"),
-  designation: cva("mb-8"),
-  imageContainer: cva("perspective-[1000px] relative h-96 w-full"),
-  name: cva("mb-1 font-bold"),
-  quote: cva("leading-[1.75]"),
-  testimonialContainer: cva("w-full max-w-4xl p-8"),
-  testimonialContent: cva("flex flex-col justify-between"),
-  testimonialGrid: cva("grid gap-20 md:grid-cols-2"),
-  testimonialImage: cva("absolute h-full w-full rounded-[1.5rem] object-cover shadow-[0_10px_30px_rgba(0,0,0,0.2)]"),
+  actions: cva("flex w-32 justify-between self-center rounded-full border p-2"),
+  aside: cva("perspective-[1000px] relative flex min-h-96 w-full flex-1 justify-center"),
+  base: cva("flex w-full max-w-6xl flex-col items-center gap-8 lg:flex-row lg:gap-20"),
+  description: cva("flex flex-col gap-1 text-pretty text-center font-light text-base"),
+  disciplines: cva("flex justify-center gap-1"),
+  image: cva("absolute size-full rounded-4xl object-cover shadow-xl transition-all duration-800 ease-[cubic-bezier(0.4,2,0.3,1)]", {
+    variants: {
+      status: {
+        current: "translate-0 pointer-events-auto z-40 rotate-y-0 scale-100 opacity-100",
+        next: "pointer-events-auto z-30 translate-x-15 -translate-y-12 -rotate-y-15 scale-85 opacity-100",
+        other: "pointer-events-none z-10 opacity-0",
+        prev: "pointer-events-auto z-20 -translate-x-15 -translate-y-12 rotate-y-15 scale-85 opacity-100",
+      },
+    },
+  }),
+  main: cva("flex flex-1 flex-col justify-between gap-4"),
+  name: cva("text-center font-bold font-heading text-3xl"),
 };
 
-function calculateGap(width: number) {
-  const minWidth = 1024;
-  const maxWidth = 1456;
-  const minGap = 60;
-  const maxGap = 86;
-  if (width <= minWidth) return minGap;
-  if (width >= maxWidth) return Math.max(minGap, maxGap + 0.060_18 * (width - maxWidth));
-  return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
-}
-
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export const AttendantsCarousel = ({ testimonials, autoplay = true, colors = {}, fontSizes = {} }: AttendantsCarouselProps) => {
-  // Color & font config
-  const colorName = colors.name ?? "#000";
-  const colorDesignation = colors.designation ?? "#6b7280";
-  const colorTestimony = colors.testimony ?? "#4b5563";
-  const colorArrowBg = colors.arrowBackground ?? "#141414";
-  const colorArrowFg = colors.arrowForeground ?? "#f1f1f7";
-  const colorArrowHoverBg = colors.arrowHoverBackground ?? "#00a6fb";
-  const fontSizeName = fontSizes.name ?? "1.5rem";
-  const fontSizeDesignation = fontSizes.designation ?? "0.925rem";
-  const fontSizeQuote = fontSizes.quote ?? "1.125rem";
-
-  // State
+export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: AttendantsCarouselProps) => {
+  // STATE
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverPrev, setHoverPrev] = useState(false);
-  const [hoverNext, setHoverNext] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(1200);
+  // REFS
+  const asideRef = useRef<HTMLDivElement>(null);
+  const autoplayRef = useRef<NodeJS.Timeout>(undefined);
+  // MEMOS
+  const size = useMemo(() => attendants.length, [attendants]);
+  const active = useMemo(() => attendants[activeIndex], [activeIndex, attendants]);
+  // CALLBACKS
+  const getStatus = useCallback(
+    (index: number) => {
+      if (index === activeIndex) return "current";
+      if ((activeIndex - 1 + size) % size === index) return "prev";
+      if ((activeIndex + 1) % size === index) return "next";
+      return "other";
+    },
+    [activeIndex, size]
+  );
 
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % size);
+    clearInterval(autoplayRef.current);
+  }, [size]);
 
-  const testimonialsLength = useMemo(() => testimonials.length, [testimonials]);
-  const activeTestimonial = useMemo(() => testimonials[activeIndex], [activeIndex, testimonials]);
-
-  // Responsive gap calculation
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + size) % size);
+    clearInterval(autoplayRef.current);
+  }, [size]);
+  // AUTOPLAY
   useEffect(() => {
-    function handleResize() {
-      if (imageContainerRef.current) {
-        setContainerWidth(imageContainerRef.current.offsetWidth);
-      }
-    }
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Autoplay
-  useEffect(() => {
-    if (autoplay) {
-      autoplayIntervalRef.current = setInterval(() => {
-        setActiveIndex((prev) => (prev + 1) % testimonialsLength);
-      }, 5000);
-    }
-    return () => {
-      if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
-    };
-  }, [autoplay, testimonialsLength]);
-
-  // Keyboard navigation
+    if (!Number.isNaN(autoplay)) autoplayRef.current = setInterval(() => setActiveIndex((prev) => (prev + 1) % size), autoplay * 1000);
+    return () => clearInterval(autoplayRef.current);
+  }, [autoplay, size]);
+  // KEYBOARD NAV
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") handlePrev();
@@ -88,193 +71,63 @@ export const AttendantsCarousel = ({ testimonials, autoplay = true, colors = {},
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line
-  }, [activeIndex, testimonialsLength]);
-
-  // Navigation handlers
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % testimonialsLength);
-    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
-  }, [testimonialsLength]);
-  const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + testimonialsLength) % testimonialsLength);
-    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
-  }, [testimonialsLength]);
-
-  // Compute transforms for each image (always show 3: left, center, right)
-  function getImageStyle(index: number): React.CSSProperties {
-    const gap = calculateGap(containerWidth);
-    const maxStickUp = gap * 0.8;
-    const offset = (index - activeIndex + testimonialsLength) % testimonialsLength;
-    const isActive = index === activeIndex;
-    const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
-    const isRight = (activeIndex + 1) % testimonialsLength === index;
-    if (isActive) {
-      return {
-        zIndex: 3,
-        opacity: 1,
-        pointerEvents: "auto",
-        transform: "translateX(0px) translateY(0px) scale(1) rotateY(0deg)",
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
-      };
-    }
-    if (isLeft) {
-      return {
-        zIndex: 2,
-        opacity: 1,
-        pointerEvents: "auto",
-        transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(15deg)`,
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
-      };
-    }
-    if (isRight) {
-      return {
-        zIndex: 2,
-        opacity: 1,
-        pointerEvents: "auto",
-        transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-15deg)`,
-        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
-      };
-    }
-    // Hide all other images
-    return {
-      zIndex: 1,
-      opacity: 0,
-      pointerEvents: "none",
-      transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
-    };
-  }
-
-  // Framer Motion variants for quote
-  const quoteVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
+  }, [handleNext, handlePrev]);
 
   return (
-    <div className={STYLES.testimonialContainer()}>
-      <div className={STYLES.testimonialGrid()}>
-        {/* Images */}
-        <div className={STYLES.imageContainer()} ref={imageContainerRef}>
-          {testimonials.map((testimonial, index) => (
-            <img
-              alt={testimonial.name}
-              className={STYLES.testimonialImage()}
-              data-index={index}
-              height={500}
-              key={testimonial.src}
-              src={testimonial.src}
-              style={getImageStyle(index)}
-              width={500} // Added to resolve biome/img error
-            />
-          ))}
-        </div>
-        {/* Content */}
-        <div className={STYLES.testimonialContent()}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              animate="animate"
-              exit="exit"
-              initial="initial"
-              key={activeIndex}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              variants={quoteVariants}
-            >
-              <h3 className={STYLES.name()} style={{ color: colorName, fontSize: fontSizeName }}>
-                {activeTestimonial.name}
-              </h3>
-              <div className={STYLES.designation()} style={{ color: colorDesignation, fontSize: fontSizeDesignation }}>
-                {activeTestimonial.disciplines.map((discipline) => (
-                  <Badge key={discipline}>{discipline}</Badge>
+    <div className={STYLES.base()}>
+      <aside className={STYLES.aside()} ref={asideRef}>
+        {attendants.map(({ image, name }, index) => (
+          <Image
+            alt={name}
+            className={STYLES.image({ status: getStatus(index) })}
+            data-index={index}
+            height={500}
+            key={image}
+            src={image}
+            width={500}
+          />
+        ))}
+      </aside>
+      <main className={STYLES.main()}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="flex-1"
+            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 20 }}
+            key={activeIndex}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <SpotlightCard className="h-full">
+              <CardHeader>
+                <CardTitle className={STYLES.name()}>{active.name}</CardTitle>
+                <CardDescription className={STYLES.disciplines()}>
+                  {active.disciplines.map((discipline) => (
+                    <Badge key={discipline}>{discipline}</Badge>
+                  ))}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className={STYLES.description()}>
+                {active.description.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
-              </div>
-              <motion.p className={STYLES.quote()} style={{ color: colorTestimony, fontSize: fontSizeQuote }}>
-                {activeTestimonial.quote.split(" ").map((word, i) => (
-                  <motion.span
-                    animate={{
-                      filter: "blur(0px)",
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    initial={{
-                      filter: "blur(10px)",
-                      opacity: 0,
-                      y: 5,
-                    }}
-                    key={`${activeTestimonial.name}-${word}-${i}`}
-                    style={{ display: "inline-block" }}
-                    transition={{
-                      duration: 0.22,
-                      ease: "easeInOut",
-                      delay: 0.025 * i,
-                    }}
-                  >
-                    {word}&nbsp;
-                  </motion.span>
-                ))}
-              </motion.p>
-            </motion.div>
-          </AnimatePresence>
-          <div className={STYLES.arrowButtons()}>
-            <button
-              aria-label="Previous testimonial"
-              className={STYLES.arrowButton({ className: "prev-button" })}
-              onClick={handlePrev}
-              onMouseEnter={() => setHoverPrev(true)}
-              onMouseLeave={() => setHoverPrev(false)}
-              style={{
-                backgroundColor: hoverPrev ? colorArrowHoverBg : colorArrowBg,
-              }}
-              type="button"
-            >
-              <FaArrowLeft color={colorArrowFg} size={28} />
-            </button>
-            <button
-              aria-label="Next testimonial"
-              className={STYLES.arrowButton({ className: "next-button" })}
-              onClick={handleNext}
-              onMouseEnter={() => setHoverNext(true)}
-              onMouseLeave={() => setHoverNext(false)}
-              style={{
-                backgroundColor: hoverNext ? colorArrowHoverBg : colorArrowBg,
-              }}
-              type="button"
-            >
-              <FaArrowRight color={colorArrowFg} size={28} />
-            </button>
-          </div>
+              </CardContent>
+            </SpotlightCard>
+          </motion.div>
+        </AnimatePresence>
+        <div className={STYLES.actions()}>
+          <Button aria-label="Participant précédent" onClick={handlePrev} size="icon-sm" variant="outline">
+            <span className="icon-[lucide--chevron-left]" />
+          </Button>
+          <Button aria-label="Participant suivant" onClick={handleNext} size="icon-sm" variant="outline">
+            <span className="icon-[lucide--chevron-right]" />
+          </Button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
-export type AttendantsCarouselProps = {
-  autoplay?: boolean;
-  colors?: Colors;
-  fontSizes?: FontSizes;
-  testimonials: Testimonial[];
-};
+export type AttendantsCarouselProps = { attendants: Attendant[]; autoplay?: number };
 
 // TYPES -----------------------------------------------------------------------------------------------------------------------------------
-type Testimonial = {
-  disciplines: string[];
-  name: string;
-  quote: string;
-  src: string;
-};
-
-type Colors = {
-  arrowBackground?: string;
-  arrowForeground?: string;
-  arrowHoverBackground?: string;
-  designation?: string;
-  name?: string;
-  testimony?: string;
-};
-
-type FontSizes = {
-  designation?: string;
-  name?: string;
-  quote?: string;
-};
+type Attendant = { description: string[]; disciplines: string[]; image: string; name: string };

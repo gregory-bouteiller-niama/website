@@ -47,7 +47,7 @@ const HEADER = {
 };
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export default function Header() {
+export function PublicHeader() {
   const { scrollY } = useScroll();
   const isScrolled = useStore(store, (state) => state.isScrolled);
 
@@ -128,10 +128,10 @@ function HeaderBurger({ isScrolled }: { isScrolled: boolean }) {
       />
       <DropdownMenuContent align="end" className={BURGER.content()} sideOffset={18}>
         <DropdownMenuGroup>
-          {navs.map((nav) => (
+          {navs.map(({ key, ...nav }) => (
             <DropdownMenuItem
               className={BURGER.item()}
-              key={nav.key}
+              key={key}
               render={<Link {...nav} activeOptions={{ includeHash: true }} resetScroll={false} />}
             >
               {nav.text}

@@ -15,7 +15,7 @@ const CONTACT = {
 export function IndexContact() {
   const data = {
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      "Notre portail, actuellement à ses prémices, est amené lui aussi à grandir en vous proposant plus de choix et de fonctionnalités. N'hésitez pas à nous contacter si vous souhaitez entamer un parcours, proposer votre voie ou devenir vous-même accompagnant. Sentez-vous libres de nous faire part de vos remarques ou poser vos questions.",
     title: "Et arpentez le chemin...",
   };
 
@@ -34,7 +34,7 @@ export function IndexContact() {
       <Card className={CONTACT.card()}>
         <CardContent>
           <form
-            className="flex w-full flex-col items-end gap-4"
+            className="flex w-full flex-col items-center gap-4"
             noValidate
             onSubmit={(e) => {
               e.preventDefault();

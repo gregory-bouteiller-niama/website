@@ -41,13 +41,7 @@ const itemVariants = cva(
   }
 );
 
-function Item({
-  className,
-  variant = "default",
-  size = "default",
-  render,
-  ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
+function Item({ className, variant = "default", size = "default", render, ...props }: ItemProps) {
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(
@@ -64,6 +58,7 @@ function Item({
     },
   });
 }
+export type ItemProps = useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>;
 
 const itemMediaVariants = cva(
   "flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start [&_svg]:pointer-events-none",

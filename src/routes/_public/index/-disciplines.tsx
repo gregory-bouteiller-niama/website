@@ -6,6 +6,7 @@ import { SpotlightItem } from "@/components/adapted/spotlight-item";
 import { Logo } from "@/components/logo";
 import { Section } from "@/components/section";
 import { ItemContent } from "@/components/ui/item";
+import { disciplines } from "@/data/disciplines";
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const DISCIPLINES = {
@@ -29,38 +30,6 @@ export function IndexDisciplines() {
     title: "Choisissez votre voie",
     description:
       "Nous vous proposons différentes pistes sur lesquelles sillonner. Aucune n'est exclusive ou ne détient à elle seule la vérité. Optez simplement pour celle avec laquelle votre Être résonne dans le moment présent et sentez vous libre d'en explorer d'autres par la suite.",
-    items: [
-      {
-        color: "rgba(71, 153, 201, .25)",
-        discipline: "yog'art",
-        key: "yogart",
-        title: "Yog'art",
-        description: [
-          "Le Yog'art associe yoga et exploration artistique au cours de séances mêlant respiration, mouvement et création afin de favoriser la détente et la présence à soi.",
-          "Cette approche soutient le bien-être et invite à développer une meilleure connaissance de soi, sans pression ni jugement.",
-        ],
-      },
-      {
-        color: "rgba(205, 106, 142, .25)",
-        discipline: "anima",
-        key: "anima",
-        title: "Hypnose spirituelle",
-        description: [
-          "L'hypnose spirituelle vous amène à explorer les facettes de votre Être qui se manifestent sur différents plans, dans un état expansé de conscience.",
-          "Par cette connexion à votre partie sage, l'accompagnant fait émerger de vous les enseignements propices à votre parcours.",
-        ],
-      },
-      {
-        color: "rgba(76, 167, 171, .25)",
-        discipline: "animus",
-        key: "animus",
-        title: "Hormèse subtile",
-        description: [
-          "L'hormèse subtile allie le concept d'hormèse, consistant à apporter au corps physique un stress modéré afin de le renforcer, et l'applique au niveau des corps subtils.",
-          "Par un échange verbal, l'accompagnant suscite le juste mouvement en vous afin de vous aider à retrouver votre alignement.",
-        ],
-      },
-    ] as const,
   };
 
   return (
@@ -68,11 +37,11 @@ export function IndexDisciplines() {
       <div className={DISCIPLINES.wrapper()}>
         <Carousel className={DISCIPLINES.carousel()} opts={{ loop: true }} plugins={[Autoplay({ delay: 10_000 })]}>
           <CarouselContent>
-            {data.items.map((item) => (
-              <CarouselItem className={DISCIPLINES.carouselItem()} key={item.key}>
+            {disciplines.map((item) => (
+              <CarouselItem className={DISCIPLINES.carouselItem()} key={item.slug}>
                 <SpotlightItem className={DISCIPLINES.item()} color={item.color} variant="outline">
                   <ItemMedia className={DISCIPLINES.itemMedia()}>
-                    <Logo className={DISCIPLINES.logo()} discipline={item.discipline} variant={item.key} />
+                    <Logo className={DISCIPLINES.logo()} discipline={item.name} variant={item.slug} />
                   </ItemMedia>
                   <ItemContent className={DISCIPLINES.itemContent()}>
                     <ItemTitle className={DISCIPLINES.itemTitle()}>{item.title}</ItemTitle>

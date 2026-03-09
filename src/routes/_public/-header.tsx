@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Separator } from "@/components/ui/separator";
 import { navs } from "@/data/public";
 import { setHeaderHoveredId, setIsScrolled, store } from "@/lib/store";
-import { useTheme } from "@/lib/theme";
+import { HeaderThemeSwitcher } from "./-header.theme-switcher";
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const HEADER = {
@@ -140,28 +140,6 @@ function HeaderBurger({ isScrolled }: { isScrolled: boolean }) {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-// THEME SWITCHER --------------------------------------------------------------------------------------------------------------------------
-const THEME_SWITCHER = {
-  dark: cva("icon-[lucide--sun] size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"),
-  light: cva("icon-[lucide--moon] absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"),
-};
-
-function HeaderThemeSwitcher() {
-  const { appTheme, setTheme } = useTheme();
-
-  function onClickToggle() {
-    setTheme(appTheme === "light" ? "dark" : "light");
-  }
-
-  return (
-    <Button onClick={onClickToggle} size="icon" type="button" variant="outline">
-      <span className={THEME_SWITCHER.dark()} />
-      <span className={THEME_SWITCHER.light()} />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
   );
 }
 

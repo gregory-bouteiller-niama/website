@@ -7,7 +7,7 @@ export default function Submit({ ref }: { ref?: React.Ref<HTMLButtonElement> }) 
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
-        <Button ref={ref}>
+        <Button ref={ref} type="submit">
           <LoadingSwap isLoading={isSubmitting}>Envoyer</LoadingSwap>
         </Button>
       )}

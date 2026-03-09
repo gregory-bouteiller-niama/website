@@ -11,13 +11,20 @@ export const PublicFooter = () => {
   };
 
   return (
-    <footer className="container fixed bottom-4 mx-auto flex w-full justify-between self-center rounded-full px-4 py-2">
-      <Button className="backdrop-blur-xl" render={<Link to="/" />} variant="outline">
+    <footer className="container pointer-events-none fixed bottom-4 mx-auto flex w-full justify-between self-center rounded-full px-4 py-2">
+      <Button className="pointer-events-auto backdrop-blur-xl" nativeButton={false} render={<Link to="/" />} variant="outline">
         Mentions Légales
       </Button>
       <div className="flex items-center gap-2">
         {data.socials.map(({ icon, href, key }) => (
-          <Button className="backdrop-blur-xl" key={key} render={<a href={href} target="_blank" />} size="icon" variant="outline">
+          <Button
+            className="pointer-events-auto backdrop-blur-xl"
+            key={key}
+            nativeButton={false}
+            render={<a href={href} target="_blank" />}
+            size="icon"
+            variant="outline"
+          >
             <span className={`${icon} size-5`} />
           </Button>
         ))}

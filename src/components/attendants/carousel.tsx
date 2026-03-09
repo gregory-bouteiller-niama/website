@@ -2,10 +2,11 @@ import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Badge } from "../adapted/badge";
+import type { DisciplinesSlug } from "@/data/disciplines";
 import { Button } from "../adapted/button";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../adapted/card";
 import { SpotlightCard } from "../adapted/spotlight-card";
+import { DisciplinesBadge } from "../disciplines/badge";
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const STYLES = {
@@ -102,8 +103,8 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
               <CardHeader>
                 <CardTitle className={STYLES.name()}>{active.name}</CardTitle>
                 <CardDescription className={STYLES.disciplines()}>
-                  {active.disciplines.map((discipline) => (
-                    <Badge key={discipline}>{discipline}</Badge>
+                  {active.disciplines.map((slug) => (
+                    <DisciplinesBadge key={slug} slug={slug} />
                   ))}
                 </CardDescription>
               </CardHeader>
@@ -130,4 +131,4 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
 export type AttendantsCarouselProps = { attendants: Attendant[]; autoplay?: number };
 
 // TYPES -----------------------------------------------------------------------------------------------------------------------------------
-type Attendant = { description: string[]; disciplines: string[]; image: string; name: string };
+type Attendant = { description: string[]; disciplines: readonly DisciplinesSlug[]; image: string; name: string };

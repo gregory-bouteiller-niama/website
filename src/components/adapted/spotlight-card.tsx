@@ -6,7 +6,7 @@ import type { ItemProps } from "./item";
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const SPOTLIGHT_CARD = {
-  base: cva("relative overflow-hidden rounded-3xl border border-neutral-800 bg-neutral-900 p-8"),
+  base: cva("relative overflow-hidden rounded-3xl border-none p-8 ring-0"),
   light: cva("pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out"),
 };
 

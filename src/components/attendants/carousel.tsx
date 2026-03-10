@@ -2,7 +2,7 @@ import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { DisciplinesSlug } from "@/data/disciplines";
+import type { Attendants } from "@/functions/attendants";
 import { Button } from "../adapted/button";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../adapted/card";
 import { SpotlightCard } from "../adapted/spotlight-card";
@@ -11,7 +11,7 @@ import { DisciplinesBadge } from "../disciplines/badge";
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
 const STYLES = {
   actions: cva("flex w-32 justify-between self-center rounded-full border p-2"),
-  aside: cva("perspective-[1000px] relative flex min-h-96 w-full flex-1 justify-center"),
+  aside: cva("perspective-[1000px] relative flex aspect-square min-h-96 w-full flex-1 justify-center"),
   base: cva("flex w-full max-w-6xl flex-col items-center gap-8 lg:flex-row lg:gap-20"),
   description: cva("flex flex-col gap-1 text-pretty text-center font-light text-base"),
   disciplines: cva("flex justify-center gap-1"),
@@ -30,15 +30,15 @@ const STYLES = {
 };
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: AttendantsCarouselProps) => {
+export const AttendantsCarousel = ({ autoplay = Number.NaN, items }: AttendantsCarouselProps) => {
   // STATE
   const [activeIndex, setActiveIndex] = useState(0);
   // REFS
   const asideRef = useRef<HTMLDivElement>(null);
   const autoplayRef = useRef<NodeJS.Timeout>(undefined);
   // MEMOS
-  const size = useMemo(() => attendants.length, [attendants]);
-  const active = useMemo(() => attendants[activeIndex], [activeIndex, attendants]);
+  const size = useMemo(() => items.length, [items]);
+  const active = useMemo(() => items[activeIndex], [activeIndex, items]);
   // CALLBACKS
   const getStatus = useCallback(
     (index: number) => {
@@ -77,15 +77,14 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
   return (
     <div className={STYLES.base()}>
       <aside className={STYLES.aside()} ref={asideRef}>
-        {attendants.map(({ image, name }, index) => (
+        {items.map(({ image }, index) => (
           <Image
-            alt={name}
+            {...image}
             className={STYLES.image({ status: getStatus(index) })}
             data-index={index}
-            height={500}
-            key={image}
-            src={image}
-            width={500}
+            key={image.alt}
+            operations={{ imagekit: { f: "avif" } }}
+            sizes="(min-width: 1280px) 536px, (min-width: 1024px) 440px, (min-width: 768px) 704px, (min-width: 640px) 576px, 100vw"
           />
         ))}
       </aside>
@@ -99,11 +98,11 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
             key={activeIndex}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <SpotlightCard className="h-full">
+            <SpotlightCard className="h-full lg:h-[448px] xl:h-[400px]">
               <CardHeader>
                 <CardTitle className={STYLES.name()}>{active.name}</CardTitle>
                 <CardDescription className={STYLES.disciplines()}>
-                  {active.disciplines.map((slug) => (
+                  {active.disciplines.map(({ slug }) => (
                     <DisciplinesBadge key={slug} slug={slug} />
                   ))}
                 </CardDescription>
@@ -117,10 +116,10 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
           </motion.div>
         </AnimatePresence>
         <div className={STYLES.actions()}>
-          <Button aria-label="Participant précédent" onClick={handlePrev} size="icon-sm" variant="outline">
+          <Button aria-label="Participant précédent" className="cursor-pointer" onClick={handlePrev} size="icon-sm" variant="outline">
             <span className="icon-[lucide--chevron-left]" />
           </Button>
-          <Button aria-label="Participant suivant" onClick={handleNext} size="icon-sm" variant="outline">
+          <Button aria-label="Participant suivant" className="cursor-pointer" onClick={handleNext} size="icon-sm" variant="outline">
             <span className="icon-[lucide--chevron-right]" />
           </Button>
         </div>
@@ -128,7 +127,4 @@ export const AttendantsCarousel = ({ attendants, autoplay = Number.NaN }: Attend
     </div>
   );
 };
-export type AttendantsCarouselProps = { attendants: Attendant[]; autoplay?: number };
-
-// TYPES -----------------------------------------------------------------------------------------------------------------------------------
-type Attendant = { description: string[]; disciplines: readonly DisciplinesSlug[]; image: string; name: string };
+export type AttendantsCarouselProps = { autoplay?: number; items: Attendants["Entity"][] };

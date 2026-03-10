@@ -53,7 +53,7 @@ export function HeaderThemeSwitcher() {
   }, [appTheme, setTheme]);
 
   return (
-    <Button onClick={onClickToggle} ref={buttonRef} size="icon" type="button" variant="outline">
+    <Button className="cursor-pointer" onClick={onClickToggle} ref={buttonRef} size="icon" type="button" variant="outline">
       <span className={HEADER_THEME_SWITCHER.dark()} />
       <span className={HEADER_THEME_SWITCHER.light()} />
       <span className="sr-only">Toggle theme</span>

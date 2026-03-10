@@ -1,11 +1,12 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/adapted/select";
 import { Field } from "@/components/form/field";
-import { disciplines } from "@/data/disciplines";
+import { readAllDisciplines } from "@/functions/disciplines";
 import { useFieldContext } from "@/hooks/form-context";
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
 export default function DisciplinesSelectField() {
   const { handleChange, name, state } = useFieldContext<string>();
+  const disciplines = readAllDisciplines();
 
   const items = [
     { label: "Voie non déterminée", value: "unknown" },

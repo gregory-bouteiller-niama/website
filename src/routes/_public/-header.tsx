@@ -4,11 +4,17 @@ import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useCallback, useMemo } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/adapted/dropdown-menu";
 import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { navs } from "@/data/public";
+import type { ReadPublicLayoutProps } from "@/functions/layouts";
 import { setHeaderHoveredId, setIsScrolled, store } from "@/lib/store";
 import { HeaderThemeSwitcher } from "./-header.theme-switcher";
 
@@ -38,16 +44,13 @@ const HEADER = {
   }),
   nav: cva("relative cursor-pointer px-4 py-2 uppercase tracking-widest sm:px-2 sm:py-1 sm:text-sm md:px-4 md:py-2 md:text-base"),
   navs: cva("flex-col items-center sm:flex-row", { variants: { isScrolled: { true: "hidden sm:flex", false: "flex" } } }),
-  stain: cva("absolute inset-0 size-full rounded-full", {
-    variants: { intent: { primary: "bg-primary/40", secondary: "bg-accent" } },
-    defaultVariants: { intent: "secondary" },
-  }),
+  stain: cva("absolute inset-0 size-full rounded-full bg-accent text-accent-foreground"),
   stainContent: cva("relative z-10"),
   wrapper: cva("fixed inset-x-4 top-4 z-50"),
 };
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export function PublicHeader() {
+export function PublicHeader({ navs }: Pick<ReadPublicLayoutProps, "navs">) {
   const { scrollY } = useScroll();
   const isScrolled = useStore(store, (state) => state.isScrolled);
 
@@ -66,7 +69,7 @@ export function PublicHeader() {
           <div className={HEADER.actions()}>
             <HeaderThemeSwitcher />
             {/* <HeaderUser signInUrl={signInUrl} signUpUrl={signUpUrl} /> */}
-            <HeaderBurger isScrolled={isScrolled} />
+            <HeaderBurger isScrolled={isScrolled} navs={navs} />
           </div>
         </header>
       </div>
@@ -106,22 +109,22 @@ export function HeaderNav({ isActive, nav: { key, text } }: HeaderNavProps) {
     </button>
   );
 }
-export type HeaderNavProps = { isActive: boolean; nav: (typeof navs)[number] };
+export type HeaderNavProps = { isActive: boolean; nav: ReadPublicLayoutProps["navs"][number] };
 
 // BURGER ----------------------------------------------------------------------------------------------------------------------------------
 const BURGER = {
   content: cva("w-(--radix-dropdown-menu-trigger-width) rounded-3xl border bg-transparent p-4 shadow-lg backdrop-blur-xl"),
   item: cva("uppercase tracking-widest"),
-  trigger: cva("", { variants: { isScrolled: { true: "flex scale-100 sm:hidden", false: "hidden scale-0" } } }),
+  trigger: cva("cursor-pointer", { variants: { isScrolled: { true: "flex scale-100 sm:hidden", false: "hidden scale-0" } } }),
   triggerIcon: cva("icon-[lucide--menu]"),
 };
 
-function HeaderBurger({ isScrolled }: { isScrolled: boolean }) {
+function HeaderBurger({ isScrolled, navs }: { isScrolled: boolean } & Pick<ReadPublicLayoutProps, "navs">) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button className={BURGER.trigger({ isScrolled })} size="icon">
+          <Button className={BURGER.trigger({ isScrolled })} size="icon" variant="outline">
             <span className={BURGER.triggerIcon()} />
           </Button>
         }

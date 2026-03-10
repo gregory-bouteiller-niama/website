@@ -11,11 +11,9 @@ export default defineConfig({
   },
   plugins: [
     cloudflare({ viteEnvironment: { name: "ssr" } }),
-    tsConfigPaths({
-      projects: ["./tsconfig.json"],
-    }),
+    tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({ prerender: { enabled: true } }),
     viteReact(),
   ],
 });

@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils";
 
 const LOGO = {
   base: cva("@container flex flex-col items-end font-logo", {
-    variants: { variant: { anima: "text-anima", animus: "text-animus", yogart: "text-yogart" } },
+    variants: { variant: { none: "text-primary", anima: "text-anima", animus: "text-animus", yogart: "text-yogart" } },
+    defaultVariants: { variant: "none" },
   }),
   subtitle: cva("text-[20cqw] lowercase leading-none"),
   title: cva("text-[33cqw] text-foreground leading-none"),

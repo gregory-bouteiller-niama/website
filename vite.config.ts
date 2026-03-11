@@ -14,7 +14,7 @@ export default defineConfig({
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
     tanstackStart({
-      pages: [{ path: "/", prerender: { enabled: true } }],
+      // pages: [{ path: "/", prerender: { enabled: true } }],
     }),
     viteReact(),
   ],

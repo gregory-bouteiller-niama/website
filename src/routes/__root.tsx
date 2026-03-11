@@ -15,6 +15,13 @@ export const Route = createRootRouteWithContext<RootContext>()({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "níama | l'équilibre invisible devenu tangible" },
+      {
+        name: "description",
+        content:
+          "Une constellation d'accompagnants rassemblés autour d'une philosophie commune : vous guider sur le chemin de votre alignement intérieur.",
+      },
+      { name: "keywords", content: "accompagnants, équilibre, alignement" },
+      { name: "robots", content: "index, follow" },
     ],
     links: [
       { rel: "stylesheet", href: appCssUrl },

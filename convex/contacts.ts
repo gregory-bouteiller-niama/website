@@ -7,8 +7,5 @@ const zMutation = zCustomMutation(mutation, NoOp);
 
 export const create = zMutation({
   args: zContactCreate,
-  handler: ({ db }, args) => {
-    console.log("createContact mutation");
-    return db.insert("contacts", args);
-  },
+  handler: ({ db }, args) => db.insert("contacts", args),
 });

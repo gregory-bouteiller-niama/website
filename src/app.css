@@ -4,6 +4,9 @@
 @import "@fontsource/museomoderno/latin-400.css";
 @import "@fontsource-variable/outfit";
 @import "@fontsource/cormorant-upright";
+
+@source not "./components/ui";
+
 @plugin "@iconify/tailwind4";
 
 @custom-variant dark (&:is(.dark *));

@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
-import { GravityStarsBackground } from "@/components/animate-ui/components/backgrounds/gravity-stars";
+import { GravityStarsBackground } from "@/components/adapted/gravity-stars";
 import { readPublicLayout } from "@/functions/layouts";
 import { PublicFooter } from "./_public/-footer";
 import { PublicHeader } from "./_public/-header";

@@ -25,10 +25,14 @@ export function IndexContactForm() {
   const form = useAppForm({
     defaultValues: defaultContactCreateValues,
     onSubmit: async ({ value }) => {
-      console.log("sending form");
-      await createContact({ data: value });
-      form.reset();
-      toast.success("Merci de votre intérêt ! Nous reviendrons vers vous très bientôt.");
+      try {
+        await createContact({ data: value });
+        form.reset();
+        toast.success("Merci de votre intérêt ! Nous reviendrons vers vous très bientôt.");
+      } catch (error) {
+        console.error(error);
+        toast.error("Une erreur survenue. Veuillez réessayer ultérieurement");
+      }
     },
   });
 

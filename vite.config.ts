@@ -13,7 +13,9 @@ export default defineConfig({
     cloudflare({ viteEnvironment: { name: "ssr" } }),
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
-    tanstackStart({ prerender: { enabled: true } }),
+    tanstackStart({
+      pages: [{ path: "/", prerender: { enabled: true } }],
+    }),
     viteReact(),
   ],
 });

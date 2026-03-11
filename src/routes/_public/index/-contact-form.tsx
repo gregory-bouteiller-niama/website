@@ -25,8 +25,7 @@ export function IndexContactForm() {
   const form = useAppForm({
     defaultValues: defaultContactCreateValues,
     onSubmit: async ({ value }) => {
-      const a = await createContact({ data: value });
-      console.log(a);
+      await createContact({ data: value });
       form.reset();
       toast.success("Merci de votre intérêt ! Nous reviendrons vers vous très bientôt.");
     },

@@ -12,6 +12,7 @@
         "@fontsource-variable/museomoderno": "^5.2.9",
         "@fontsource-variable/outfit": "^5.2.8",
         "@fontsource/cormorant-upright": "^5.2.7",
+        "@fontsource/museomoderno": "^5.2.8",
         "@iconify/json": "^2.2.448",
         "@iconify/tailwind4": "^1.2.3",
         "@mrfinch/booking": "^0.2.4",
@@ -260,6 +261,8 @@
     "@fontsource-variable/outfit": ["@fontsource-variable/outfit@5.2.8", "", {}, "sha512-4oUDCZx/Tcz6HZP423w/niqEH31Gks5IsqHV2ZZz1qKHaVIZdj2f0/S1IK2n8jl6Xo0o3N+3RjNHlV9R73ozQA=="],
 
     "@fontsource/cormorant-upright": ["@fontsource/cormorant-upright@5.2.7", "", {}, "sha512-0jspLsi22zkrsxRhEIXVCeDPAKRuiUCuBlZHhL+IJU4ftbs9dPv1bpDS0tfJj0ma4L6HJvGN0pkgWl4NEdhKsw=="],
+
+    "@fontsource/museomoderno": ["@fontsource/museomoderno@5.2.8", "", {}, "sha512-0IiO38BI1FpJ7DD/yraZ0T6FYcp4K4Ok2vesKUGMRnxF3FlULQTzJs/22Nswy+ZScoiCagz6kxf8NFLE1R++gw=="],
 
     "@hono/node-server": ["@hono/node-server@1.19.9", "", { "peerDependencies": { "hono": "^4" } }, "sha512-vHL6w3ecZsky+8P5MD+eFfaGTyCeOHUIFYMGpQGbrBTSmNNoxv0if69rEZ5giu36weC5saFuznL411gRX7bJDw=="],
 

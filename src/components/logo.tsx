@@ -10,7 +10,7 @@ const LOGO = {
   title: cva("text-[33cqw] text-foreground leading-none"),
 };
 
-export function Logo({ className, discipline, variant, ...props }: LogoProps) {
+export function Logo({ className, discipline, showTitle = true, variant, ...props }: LogoProps) {
   return (
     <div className={cn(LOGO.base({ variant }), className)}>
       <svg viewBox="0 0 860 860" {...props} aria-label="title" role="img">
@@ -52,9 +52,9 @@ export function Logo({ className, discipline, variant, ...props }: LogoProps) {
           </clipPath>
         </defs>
       </svg>
-      <span className={cn(LOGO.title())}>níama</span>
+      {showTitle && <span className={cn(LOGO.title())}>níama</span>}
       <span className={cn(LOGO.subtitle())}>{discipline}</span>
     </div>
   );
 }
-type LogoProps = ComponentProps<"svg"> & VariantProps<typeof LOGO.base> & { discipline?: string };
+type LogoProps = ComponentProps<"svg"> & VariantProps<typeof LOGO.base> & { discipline?: string; showTitle?: boolean };

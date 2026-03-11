@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { useStore } from "@tanstack/react-store";
-import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useCallback, useMemo } from "react";
@@ -11,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/adapted/dropdown-menu";
+import { Logo } from "@/components/logo";
 import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -37,8 +37,6 @@ const HEADER = {
       { isScrolled: true, variant: "aside", class: "scale-100" },
     ],
   }),
-  logoImage: cva("w-full"),
-  logoText: cva("font-logo text-[40px]"),
   menu: cva("sticky top-4 z-50 flex min-h-14.5 w-auto flex-col justify-center self-center border-y py-2", {
     variants: { isScrolled: { true: "border-y-transparent", false: "border-y-muted" } },
   }),
@@ -63,7 +61,7 @@ export function PublicHeader({ navs }: Pick<ReadPublicLayoutProps, "navs">) {
       <div className={HEADER.wrapper()}>
         <header className={HEADER.base({ isScrolled })}>
           <Link className={HEADER.logo({ isScrolled, variant: "aside" })} to="/">
-            <Image alt="Logo" className={HEADER.logoImage()} height={100} sizes="128px" src="/logo.png" width={100} />
+            <Logo showTitle={false} />
           </Link>
 
           <div className={HEADER.actions()}>
@@ -75,8 +73,7 @@ export function PublicHeader({ navs }: Pick<ReadPublicLayoutProps, "navs">) {
       </div>
       <Section className="flex justify-center" id="top-1">
         <Link className={HEADER.logo({ variant: "main" })} to="/">
-          <Image alt="Logo" className={HEADER.logoImage()} height={100} sizes="128px" src="/logo.png" width={100} />
-          <h1 className={HEADER.logoText()}>níama</h1>
+          <Logo className="w-full" />
         </Link>
       </Section>
       <Separator className="self-center! h-6" orientation="vertical" />

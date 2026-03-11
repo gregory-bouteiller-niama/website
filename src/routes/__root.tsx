@@ -4,6 +4,7 @@ import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/reac
 import { cva } from "class-variance-authority";
 import type { ConvexReactClient } from "convex/react";
 import { Toaster } from "@/components/adapted/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/theme";
 import appCssUrl from "../app.css?url";
 
@@ -37,8 +38,10 @@ function RootDocument({ children }: RootDocumentProps) {
       </head>
       <body className={ROOT.base()}>
         <ThemeProvider>
-          {children}
-          <Toaster position="bottom-center" richColors />
+          <TooltipProvider>
+            {children}
+            <Toaster position="bottom-center" richColors />
+          </TooltipProvider>
         </ThemeProvider>
         <Scripts />
       </body>

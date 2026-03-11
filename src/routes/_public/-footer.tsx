@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/adapted/button";
+import { IconButton } from "@/components/adapted/icon-button";
 import type { ReadPublicLayoutProps } from "@/functions/layouts";
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
@@ -10,17 +11,17 @@ export const PublicFooter = ({ socials }: Pick<ReadPublicLayoutProps, "socials">
         Mentions Légales
       </Button>
       <div className="flex items-center gap-2">
-        {socials.map(({ icon, href, key }) => (
-          <Button
+        {socials.map(({ href, icon, key, label }) => (
+          <IconButton
             className="pointer-events-auto backdrop-blur-xl"
+            icon={icon}
             key={key}
+            label={label}
             nativeButton={false}
             render={<a href={href} target="_blank" />}
             size="icon"
             variant="outline"
-          >
-            <span className={`${icon} size-5`} />
-          </Button>
+          />
         ))}
       </div>
     </footer>

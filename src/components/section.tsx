@@ -2,8 +2,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
 import { motion, useInView } from "motion/react";
 import { useEffect, useRef } from "react";
+import { Separator } from "@/components/adapted/separator";
 import { cn } from "@/lib/utils";
-import { Separator } from "./ui/separator";
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
 const SECTION = {

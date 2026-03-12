@@ -1,6 +1,6 @@
 import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Attendants } from "@/functions/attendants";
 import { Button } from "../adapted/button";

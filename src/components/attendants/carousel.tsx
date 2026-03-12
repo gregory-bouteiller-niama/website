@@ -1,7 +1,7 @@
 import { Image } from "@unpic/react";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Attendants } from "@/functions/attendants";
 import { Button } from "../adapted/button";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../adapted/card";
@@ -37,8 +37,8 @@ export const AttendantsCarousel = ({ autoplay = Number.NaN, items }: AttendantsC
   const asideRef = useRef<HTMLDivElement>(null);
   const autoplayRef = useRef<NodeJS.Timeout>(undefined);
   // MEMOS
-  const size = useMemo(() => items.length, [items]);
-  const active = useMemo(() => items[activeIndex], [activeIndex, items]);
+  const size = items.length;
+  const active = items[activeIndex];
   // CALLBACKS
   const getStatus = useCallback(
     (index: number) => {

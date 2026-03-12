@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 
 // MAIN ------------------------------------------------------------------------------------------------------------------------------------
-export const SECTION = {
+const SECTION = {
   base: cva("relative flex w-full flex-col items-center gap-4 pb-8"),
   description: cva("mb-12 max-w-4xl text-center font-light text-lg text-muted-foreground sm:text-xl"),
   separator: cva("self-center! h-24"),

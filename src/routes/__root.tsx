@@ -32,7 +32,7 @@ export const Route = createRootRouteWithContext<RootContext>()({
 });
 
 // STYLES ----------------------------------------------------------------------------------------------------------------------------------
-export const ROOT = {
+const ROOT = {
   base: cva("flex min-h-screen flex-col overflow-x-hidden antialiased"),
 };
 

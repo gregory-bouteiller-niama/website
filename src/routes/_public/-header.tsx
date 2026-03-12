@@ -92,7 +92,7 @@ export function PublicHeader({ navs }: Pick<ReadPublicLayoutProps, "navs">) {
 }
 
 // NAV -------------------------------------------------------------------------------------------------------------------------------------
-export function HeaderNav({ isActive, nav: { key, text } }: HeaderNavProps) {
+function HeaderNav({ isActive, nav: { key, text } }: HeaderNavProps) {
   const headerHoveredId = useStore(store, ({ headerHoveredId }) => headerHoveredId);
 
   const handleOnMouseEnter = useCallback(() => setHeaderHoveredId(key), [key]);
